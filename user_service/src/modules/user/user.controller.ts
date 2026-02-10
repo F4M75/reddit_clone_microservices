@@ -1,22 +1,15 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Body, Patch, Param, Delete } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto, USER_PATTERNS } from '@f4m75/shared-service-contract';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
-@Controller('user')
+@Controller()
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
+  @MessagePattern(USER_PATTERNS.CREATE)
+  create(@Payload() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 

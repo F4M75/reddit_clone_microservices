@@ -10,6 +10,7 @@ async function bootstrap() {
       port: process.env.PORT ?? 3001,
     },
   });
+
   await app.listen();
 }
 bootstrap();
