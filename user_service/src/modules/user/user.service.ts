@@ -1,14 +1,20 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from '@f4m75/shared-service-contract';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  CreateUserDto,
+  LoginUserDto,
+  UpdateUserDto,
+} from '@f4m75/shared-service-contract';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private jwtService: JwtService,
+  ) {}
   async create(createUserDto: CreateUserDto) {
-    console.log('tonga ato ooo');
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
     const user = await this.prisma.user.create({
       data: {
@@ -24,19 +30,58 @@ export class UserService {
     return user;
   }
 
+  async login(loginUserDto: LoginUserDto) {
+    const { email, password } = loginUserDto;
+
+    const user = await this.prisma.user.findUniqueOrThrow({
+      where: {
+        email: email,
+      },
+    });
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatch) {
+      throw new BadRequestException('Wrong Credentials');
+    }
+
+    return {
+      token: this.getJwtToken(user.id, user.email),
+      user: user,
+    };
+  }
+
   findAll() {
-    return `This action returns all user`;
+    return this.prisma.user.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findOne(id: string) {
+    return this.prisma.user.findUniqueOrThrow({
+      where: {
+        id: id,
+      },
+    });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  update(updateUserDto: UpdateUserDto) {
+    return this.prisma.user.update({
+      where: {
+        id: updateUserDto.id,
+      },
+      data: updateUserDto,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  remove(id: string) {
+    return this.prisma.user.delete({
+      where: {
+        id: id,
+      },
+    });
+  }
+
+  getJwtToken(id: string, email: string) {
+    const token = this.jwtService.sign({ id, email });
+    return token;
   }
 }

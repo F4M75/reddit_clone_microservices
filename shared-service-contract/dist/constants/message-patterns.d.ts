@@ -4,4 +4,5 @@ export declare const USER_PATTERNS: {
     FIND_ONE: string;
     UPDATE: string;
     DELETE: string;
+    LOGIN: string;
 };

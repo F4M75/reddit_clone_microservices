@@ -7,4 +7,5 @@ exports.USER_PATTERNS = {
     FIND_ONE: "user.findOne",
     UPDATE: "user.update",
     DELETE: "user.delete",
+    LOGIN: "user.login",
 };

@@ -1,7 +1,11 @@
-import { Controller, Get, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Param } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { CreateUserDto, USER_PATTERNS } from '@f4m75/shared-service-contract';
+import {
+  CreateUserDto,
+  LoginUserDto,
+  UpdateUserDto,
+  USER_PATTERNS,
+} from '@f4m75/shared-service-contract';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 
 @Controller()
@@ -13,23 +17,28 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
-  @Get()
+  @MessagePattern(USER_PATTERNS.LOGIN)
+  login(@Payload() loginUserDto: LoginUserDto) {
+    return this.userService.login(loginUserDto);
+  }
+
+  @MessagePattern(USER_PATTERNS.FIND_ALL)
   findAll() {
     return this.userService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  @MessagePattern(USER_PATTERNS.FIND_ONE)
+  findOne(@Payload('id') id: string) {
+    return this.userService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  @MessagePattern(USER_PATTERNS.UPDATE)
+  update(@Payload() updateUserDto: UpdateUserDto) {
+    return this.userService.update(updateUserDto);
   }
 
-  @Delete(':id')
+  @MessagePattern(USER_PATTERNS.DELETE)
   remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+    return this.userService.remove(id);
   }
 }
