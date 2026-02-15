@@ -15,6 +15,7 @@ import {
   UpdateUserDto,
   USER_PATTERNS,
 } from '@f4m75/shared-service-contract';
+import { Public, CurrentUser } from '../jwt';
 
 @Controller('user')
 export class UserController {
@@ -22,6 +23,7 @@ export class UserController {
     @Inject('USER_SERVICE') private readonly userClient: ClientProxy,
   ) {}
 
+  @Public()
   @Post()
   createUser(@Body() createUserDto: CreateUserDto) {
     return this.userClient.send(USER_PATTERNS.CREATE, createUserDto);
@@ -33,17 +35,24 @@ export class UserController {
   }
 
   @Get(':id')
-  getOneUser(@Param() id: string) {
+  getOneUser(@Param('id') id: string) {
     return this.userClient.send(USER_PATTERNS.FIND_ONE, id);
   }
 
+  @Public()
   @Post('/login')
   loginUser(@Body() loginUserDto: LoginUserDto) {
     return this.userClient.send(USER_PATTERNS.LOGIN, loginUserDto);
   }
 
   @Patch()
-  updateUser(@Body() updateUserDto: UpdateUserDto) {
-    return this.userClient.send(USER_PATTERNS.UPDATE, updateUserDto);
+  updateUser(
+    @CurrentUser() user: { id: string; email: string },
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.userClient.send(USER_PATTERNS.UPDATE, {
+      ...updateUserDto,
+      id: user.id,
+    });
   }
 }

@@ -1,16 +1,25 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-
+import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import configuration from 'config/configuration';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import type { StringValue } from 'ms';
+import { JwtStrategy, JwtAuthGuard } from './jwt';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       load: [configuration],
+    }),
+    PassportModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: (process.env.JWT_EXP ?? '2h') as StringValue },
     }),
     ClientsModule.register([
       {
@@ -25,6 +34,13 @@ import { UserModule } from './user/user.module';
     UserModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    JwtStrategy,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule {}
