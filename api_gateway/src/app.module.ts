@@ -10,6 +10,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import type { StringValue } from 'ms';
 import { JwtStrategy, JwtAuthGuard } from './jwt';
+import { PostModule } from './post/post.module';
 
 @Module({
   imports: [
@@ -31,7 +32,18 @@ import { JwtStrategy, JwtAuthGuard } from './jwt';
         },
       },
     ]),
+    ClientsModule.register([
+      {
+        name: 'POST_SERVICE',
+        transport: Transport.TCP,
+        options: {
+          host: 'localhost',
+          port: 3002,
+        },
+      },
+    ]),
     UserModule,
+    PostModule,
   ],
   controllers: [AppController],
   providers: [

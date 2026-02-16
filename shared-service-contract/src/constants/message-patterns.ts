@@ -6,3 +6,12 @@ export const USER_PATTERNS = {
   DELETE: "user.delete",
   LOGIN: "user.login",
 };
+
+export const POST_PATTERNS = {
+  CREATE: "post.create",
+  FIND_ALL: "post.findAll",
+  FIND_ONE: "post.findOne",
+  UPDATE: "post.update",
+  DELETE: "post.delete",
+  USER_POST: "post.userPost",
+};
