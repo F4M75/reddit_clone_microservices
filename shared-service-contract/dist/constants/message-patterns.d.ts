@@ -6,3 +6,11 @@ export declare const USER_PATTERNS: {
     DELETE: string;
     LOGIN: string;
 };
+export declare const POST_PATTERNS: {
+    CREATE: string;
+    FIND_ALL: string;
+    FIND_ONE: string;
+    UPDATE: string;
+    DELETE: string;
+    USER_POST: string;
+};

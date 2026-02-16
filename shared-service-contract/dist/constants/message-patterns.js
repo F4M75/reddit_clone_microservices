@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.USER_PATTERNS = void 0;
+exports.POST_PATTERNS = exports.USER_PATTERNS = void 0;
 exports.USER_PATTERNS = {
     CREATE: "user.create",
     FIND_ALL: "user.findAll",
@@ -8,4 +8,12 @@ exports.USER_PATTERNS = {
     UPDATE: "user.update",
     DELETE: "user.delete",
     LOGIN: "user.login",
+};
+exports.POST_PATTERNS = {
+    CREATE: "post.create",
+    FIND_ALL: "post.findAll",
+    FIND_ONE: "post.findOne",
+    UPDATE: "post.update",
+    DELETE: "post.delete",
+    USER_POST: "post.userPost",
 };
