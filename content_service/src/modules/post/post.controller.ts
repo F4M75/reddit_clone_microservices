@@ -1,7 +1,10 @@
-import { Controller, Get, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Param, Delete } from '@nestjs/common';
 import { PostService } from './post.service';
-import { UpdatePostDto } from './dto/update-post.dto';
-import { CreatePostDto, POST_PATTERNS } from '@f4m75/shared-service-contract';
+import {
+  CreatePostDto,
+  POST_PATTERNS,
+  UpdatePostDto,
+} from '@f4m75/shared-service-contract';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 
 @Controller('post')
@@ -13,19 +16,19 @@ export class PostController {
     return this.postService.create(createPostDto);
   }
 
-  @Get()
+  @MessagePattern(POST_PATTERNS.FIND_ALL)
   findAll() {
     return this.postService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postService.findOne(+id);
+  @MessagePattern(POST_PATTERNS.FIND_ONE)
+  findOne(@Payload() id: string) {
+    return this.postService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postService.update(+id, updatePostDto);
+  @MessagePattern(POST_PATTERNS.UPDATE)
+  update(@Payload() updatePostDto: UpdatePostDto) {
+    return this.postService.update(updatePostDto);
   }
 
   @Delete(':id')
