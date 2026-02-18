@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Inject,
   Param,
@@ -38,5 +39,15 @@ export class PostController {
   @Patch()
   updatePost(@Body() updatePostDto: UpdatePostDto) {
     return this.postClient.send(POST_PATTERNS.UPDATE, updatePostDto);
+  }
+
+  @Delete(':id')
+  deletePost(@Param('id') id: string) {
+    return this.postClient.send(POST_PATTERNS.DELETE, id);
+  }
+
+  @Get('/:id/user_posts')
+  getUserPost(@Param('id') id: string) {
+    return this.postClient.send(POST_PATTERNS.USER_POST, id);
   }
 }
