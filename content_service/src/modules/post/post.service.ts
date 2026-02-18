@@ -32,7 +32,12 @@ export class PostService {
     });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} post`;
+  remove(id: string) {
+    return this.prisma.post.delete({ where: { id } });
+  }
+
+  getUserPost(id: string) {
+    console.log(id, 'here it is guyss');
+    return this.prisma.post.findMany({ where: { userId: id } });
   }
 }

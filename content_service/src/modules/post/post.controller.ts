@@ -1,4 +1,4 @@
-import { Controller, Param, Delete } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { PostService } from './post.service';
 import {
   CreatePostDto,
@@ -31,8 +31,13 @@ export class PostController {
     return this.postService.update(updatePostDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.postService.remove(+id);
+  @MessagePattern(POST_PATTERNS.DELETE)
+  remove(@Payload() id: string) {
+    return this.postService.remove(id);
+  }
+
+  @MessagePattern(POST_PATTERNS.USER_POST)
+  getUserPost(@Payload() id: string) {
+    return this.postService.getUserPost(id);
   }
 }
