@@ -42,6 +42,16 @@ import { PostModule } from './post/post.module';
         },
       },
     ]),
+    ClientsModule.register([
+      {
+        name: 'SUBREDDIT_SERVICE',
+        transport: Transport.TCP,
+        options: {
+          host: 'localhost',
+          port: 3003,
+        },
+      },
+    ]),
     UserModule,
     PostModule,
   ],
