@@ -15,3 +15,11 @@ export const POST_PATTERNS = {
   DELETE: "post.delete",
   USER_POST: "post.userPost",
 };
+
+export const SUBREDDIT_PATTERNS = {
+  CREATE: "subreddit.create",
+  FIND_ALL: "subreddit.findAll",
+  FIND_ONE: "subreddit.findOne",
+  UPDATE: "subreddit.update",
+  DELETE: "subreddit.delete",
+};

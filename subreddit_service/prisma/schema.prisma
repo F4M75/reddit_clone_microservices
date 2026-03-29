@@ -12,8 +12,36 @@ datasource db {
   provider = "postgresql"
 }
 
+enum SubredditType {
+  PUBLIC
+  PRIVATE
+  RESTRICTED
+}
+
+enum Role {
+  MEMBER
+  MODERATOR
+  ADMIN
+  BANNED
+}
+
 model Subreddit {
-  id          String @id @default(uuid())
+  id          String        @id @default(uuid())
   name        String
   description String
+  type        SubredditType
+  topic       String
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime?     @updatedAt @map("updated_at")
+  deletedAt   DateTime?     @map("deleted_at")
+}
+
+model Membership {
+  id          String    @id @default(uuid())
+  userId      String
+  subredditId String
+  role        Role
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime? @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
 }

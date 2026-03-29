@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.POST_PATTERNS = exports.USER_PATTERNS = void 0;
+exports.SUBREDDIT_PATTERNS = exports.POST_PATTERNS = exports.USER_PATTERNS = void 0;
 exports.USER_PATTERNS = {
     CREATE: "user.create",
     FIND_ALL: "user.findAll",
@@ -16,4 +16,11 @@ exports.POST_PATTERNS = {
     UPDATE: "post.update",
     DELETE: "post.delete",
     USER_POST: "post.userPost",
+};
+exports.SUBREDDIT_PATTERNS = {
+    CREATE: "subreddit.create",
+    FIND_ALL: "subreddit.findAll",
+    FIND_ONE: "subreddit.findOne",
+    UPDATE: "subreddit.update",
+    DELETE: "subreddit.delete",
 };
