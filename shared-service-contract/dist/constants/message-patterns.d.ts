@@ -14,3 +14,10 @@ export declare const POST_PATTERNS: {
     DELETE: string;
     USER_POST: string;
 };
+export declare const SUBREDDIT_PATTERNS: {
+    CREATE: string;
+    FIND_ALL: string;
+    FIND_ONE: string;
+    UPDATE: string;
+    DELETE: string;
+};

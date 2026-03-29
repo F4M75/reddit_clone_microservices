@@ -11,6 +11,7 @@ import { JwtModule } from '@nestjs/jwt';
 import type { StringValue } from 'ms';
 import { JwtStrategy, JwtAuthGuard } from './jwt';
 import { PostModule } from './post/post.module';
+import { SubredditModule } from './subreddit/subreddit.module';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { PostModule } from './post/post.module';
     ]),
     UserModule,
     PostModule,
+    SubredditModule,
   ],
   controllers: [AppController],
   providers: [

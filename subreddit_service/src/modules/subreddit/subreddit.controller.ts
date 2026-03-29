@@ -1,34 +1,38 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { SubredditService } from './subreddit.service';
-import { CreateSubredditDto } from './dto/create-subreddit.dto';
-import { UpdateSubredditDto } from './dto/update-subreddit.dto';
+import {
+  CreateSubredditDto,
+  SUBREDDIT_PATTERNS,
+  UpdateSubredditDto,
+} from '@f4m75/shared-service-contract';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
 @Controller('subreddit')
 export class SubredditController {
   constructor(private readonly subredditService: SubredditService) {}
 
-  @Post()
-  create(@Body() createSubredditDto: CreateSubredditDto) {
+  @MessagePattern(SUBREDDIT_PATTERNS.CREATE)
+  create(@Payload() createSubredditDto: CreateSubredditDto) {
     return this.subredditService.create(createSubredditDto);
   }
 
-  @Get()
+  @MessagePattern(SUBREDDIT_PATTERNS.FIND_ALL)
   findAll() {
     return this.subredditService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.subredditService.findOne(+id);
+  @MessagePattern(SUBREDDIT_PATTERNS.FIND_ONE)
+  findOne(@Payload('id') id: string) {
+    return this.subredditService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSubredditDto: UpdateSubredditDto) {
-    return this.subredditService.update(+id, updateSubredditDto);
+  @MessagePattern(SUBREDDIT_PATTERNS.UPDATE)
+  update(@Payload() updateSubredditDto: UpdateSubredditDto) {
+    return this.subredditService.update(updateSubredditDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.subredditService.remove(+id);
+  @MessagePattern(SUBREDDIT_PATTERNS.DELETE)
+  remove(@Payload('id') id: string) {
+    return this.subredditService.remove(id);
   }
 }

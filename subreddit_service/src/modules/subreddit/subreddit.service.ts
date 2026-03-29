@@ -1,26 +1,40 @@
 import { Injectable } from '@nestjs/common';
-import { CreateSubredditDto } from './dto/create-subreddit.dto';
-import { UpdateSubredditDto } from './dto/update-subreddit.dto';
+import { CreateSubredditDto } from '@f4m75/shared-service-contract';
+import { UpdateSubredditDto } from '@f4m75/shared-service-contract';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class SubredditService {
+  constructor(private prisma: PrismaService) {}
   create(createSubredditDto: CreateSubredditDto) {
-    return 'This action adds a new subreddit';
+    const data = {
+      name: createSubredditDto.name,
+      description: createSubredditDto.description,
+      topic: createSubredditDto.topic,
+      type: createSubredditDto.type,
+    };
+
+    return this.prisma.subreddit.create({ data });
   }
 
   findAll() {
-    return `This action returns all subreddit`;
+    return this.prisma.subreddit.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} subreddit`;
+  findOne(id: string) {
+    return this.prisma.subreddit.findUnique({ where: { id } });
   }
 
-  update(id: number, updateSubredditDto: UpdateSubredditDto) {
-    return `This action updates a #${id} subreddit`;
+  update(updateSubredditDto: UpdateSubredditDto) {
+    return this.prisma.subreddit.update({
+      where: {
+        id: updateSubredditDto.id,
+      },
+      data: updateSubredditDto,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} subreddit`;
+  remove(id: string) {
+    return this.prisma.subreddit.delete({ where: { id } });
   }
 }
